@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://cognitivemap.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://cognitivemap.com/about.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cognitivemap.com/collection.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cognitivemap.com/products.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cognitivemap.com/services.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cognitivemap.com/blog.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cognitivemap.com/faq.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cognitivemap.com/contact.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cognitivemap.com/privacy-policy.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://cognitivemap.com/terms-and-conditions.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://cognitivemap.com/disclaimer.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://cognitivemap.com/cookie-policy.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://cognitivemap.com/blog/cognitive-load-theory-and-multimedia-pedagogy.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cognitivemap.com/blog/neural-mechanisms-of-concept-mapping-and-spatial-memory.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cognitivemap.com/blog/spaced-repetition-algorithms-and-retrieval-practice-kinetics.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cognitivemap.com/blog/metacognitive-scaffolding-and-inquiry-based-curricula.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cognitivemap.com/blog/neuroplasticity-and-executive-function-in-accelerated-learning.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cognitivemap.com/blog/pedagogical-diagnostics-and-adaptive-learning-metrology.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+</urlset>
